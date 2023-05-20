@@ -4,7 +4,11 @@ import { blue, orange } from "@mui/material/colors";
 export const themeLight = createTheme({
     palette: {
         primary: {
-            main: '#2196F3',
+            main: '#0078C8',
+            light: '#13B5EA',
+            dark: '#213B55',
+            "50": '#ECF2F6',
+            "100": '#BBF3FD'
         },
         divider: '##BDBDBD',
         text: {
@@ -15,10 +19,11 @@ export const themeLight = createTheme({
             default: '##FFFFFF',
         },
         secondary: {
-            main: '#03A9F4',
+            main: '#6FEFC1',
+
         },
         action: {
-            
+
         }
     },
 })
@@ -43,7 +48,7 @@ export const themeDark = createTheme({
             main: '#CF6679',
         },
         action: {
-            
+
         }
     },
 })

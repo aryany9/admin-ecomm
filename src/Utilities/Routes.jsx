@@ -1,26 +1,24 @@
 import React from 'react'
-import { Route, Routes } from "react-router-dom"
-import Homepage from "../Screens/Homepage/index"
-import Login from '../Screens/Authentication/Login'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Homepage from './../Screens/Homepage'
+import GuestPage from '../Screens'
+import UserDashboard from '../Components/UserManagement'
 import SignUp from '../Screens/Authentication/Signup'
+import Login from '../Screens/Authentication/Login'
 
-
-// Authentication page Routes
-export const LoginRoutes = () => {
+function AppRouter() {
     return (
-        <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-        </Routes>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<GuestPage />} />
+                <Route path='home' element={<Homepage />} />
+                <Route path='user-dashboard' element={<UserDashboard />} />
+                <Route path='login' element={<Login />} />
+                <Route path='signup' element={<SignUp />} />
+
+            </Routes>
+        </BrowserRouter>
     )
 }
 
-
-// Homepage Routes
-export const HomeRoutes = () => {
-    return (
-        <Routes>
-            <Route path="/homepage" element={<Homepage />} />
-        </Routes>
-    )
-}
+export default AppRouter

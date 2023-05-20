@@ -2,29 +2,19 @@ import logo from './logo.svg';
 import './App.css';
 import { ThemeProvider } from '@mui/material';
 import { themeLight, themeDark } from './Theme/Theme';
-import { BrowserRouter, Navigate } from 'react-router-dom';
-import { HomeRoutes, LoginRoutes } from './Utilities/Routes';
+import GuestPage from './Screens';
+import AppRouter from './Utilities/Routes';
+import NavigationDrawer from './Components/widgets/NavDrawer';
 
-let routeConfig = [];
-routeConfig = routeConfig.concat(LoginRoutes());
 
 function App() {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
   return (
     <ThemeProvider theme={themeLight}>
+
       <div className="App">
-        <BrowserRouter >
-          {
-            isLoggedIn ? (
-              <Navigate to="/homepage" />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-          <LoginRoutes />
-          <HomeRoutes />
-        </BrowserRouter>
       </div>
+      <AppRouter />
     </ThemeProvider>
   );
 }
