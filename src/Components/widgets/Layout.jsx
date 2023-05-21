@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Navbar from './Navbar';
 import NavigationDrawer from './NavDrawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Box, Toolbar, Typography, AppBar } from '@mui/material';
+import { Box, Toolbar, Typography, AppBar, Button } from '@mui/material';
 import AppDrawer from './AppDrawer';
 
 const LayoutStructure = styled.div`
@@ -27,15 +27,16 @@ const LayoutComponent = styled.div`
 
 const drawerWidth = 240;
 
-const Layout = ({ children, title }) => {
+const Layout = ({ children, title, action }) => {
     return (
         <LayoutStructure>
             <AppDrawer />
             <LayoutChildren>
-                <Toolbar>
-                    <Typography fontWeight={'bold'} >
+                <Toolbar >
+                    <Typography fontWeight={'bold'} flexGrow={1} >
                         {title ?? 'Page'}
                     </Typography>
+                    <Button color="inherit">Login</Button>
                 </Toolbar>
                 <LayoutComponent >
 

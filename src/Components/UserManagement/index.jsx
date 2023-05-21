@@ -1,5 +1,5 @@
 import Layout from '../widgets/Layout'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,9 +9,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import FromApi from '../../Utilities/FromApi';
+import { getUsers } from '../../Services/UserDashboardService';
+import LoadingIcons from 'react-loading-icons'
+import { useTheme } from '@mui/material/styles';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -41,7 +44,7 @@ const columns = [
         label: 'Id',
         minWidth: 30,
         // align: 'right',
-        format: (value) => value.toFixed(2),
+        format: (value) => value,
     },
     { id: 'fName', label: 'First Name', minWidth: 150 },
     { id: 'lName', label: 'Last Name', minWidth: 150 },
@@ -60,26 +63,34 @@ const columns = [
         align: 'right',
         format: (value) => value.toLocaleString('en-US'),
     },
-    // {
-    //     id: 'density',
-    //     label: 'Density',
-    //     minWidth: 170,
-    //     align: 'right',
-    //     format: (value) => value.toFixed(2),
-    // },
 ];
 
 function createData(userId, fName, lName, phone, email, actions) {
     return { userId, fName, lName, phone, email, actions };
 }
 
-const rows = [
-    // createData('India', 'IN', 1324171354, 3287263),
-    createData('1', 'Aryan', 'Yadav', '9123456789', 'aryan92gmail.com', <IconButton LinkComponent={'/edit'}><Edit /></IconButton>),
-];
 
 
 function UserDashboard() {
+    const theme = useTheme();
+    const [users, setUsers] = useState([]);
+
+    const rows = users.map((user) =>
+    (
+        createData(
+            user.id,
+            user.firstName,
+            user.lastName,
+            user.mobileNumber,
+            user.emailId,
+            <IconButton LinkComponent="/edit">
+                <Edit />
+            </IconButton>
+        )
+    )
+    );
+
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -91,58 +102,77 @@ function UserDashboard() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+    const config = {};
 
-    console.log(FromApi.get('/todos/1'))
+    useEffect(() => {
+        getUsers(config, (res) => {
+            setUsers(res)
+        }, (err) => {
+            alert(err)
+        });
+    }, [])
+
     return (
         <Layout title='Manage Users'>
-            <Paper sx={{ display: 'flex', flexDirection: 'column', width: '100%', overflow: 'hidden', tableLayout: 'fixed' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <StyledTableRow>
-                                {columns.map((column) => (
-                                    <StyledTableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </StyledTableCell>
-                                ))}
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <StyledTableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </StyledTableCell>
-                                                );
-                                            })}
-                                        </StyledTableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+            {users.length === 0 ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'calc(100vh - 100px)' }}>
+                    <LoadingIcons.BallTriangle stroke={theme.palette.primary.light} strokeOpacity={1} fill={theme.palette.primary.main} strokeWidth={4} height={100} width={60} />
+                </div>
+            ) : (
+                <Paper sx={{ display: 'flex', flexDirection: 'column', width: '100%', overflow: 'hidden', tableLayout: 'fixed' }}>
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <StyledTableRow>
+                                    {columns.map((column) => (
+                                        <StyledTableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </StyledTableCell>
+                                    ))}
+                                </StyledTableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rows
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row) => {
+                                        return (
+                                            <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                {columns.map((column) => {
+                                                    const value = row[column.id];
+                                                    return (
+                                                        <StyledTableCell key={column.id} align={column.align}>
+                                                            {column.format && typeof value === 'number'
+                                                                ? column.format(value)
+                                                                : value}
+                                                        </StyledTableCell>
+                                                    );
+                                                })}
+                                            </StyledTableRow>
+                                        );
+                                    })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 10 }}>
+                        <Button variant="contained" color="secondary" disableElevation size='small' style={{fontWeight: 'bold'}}>
+                            Add User
+                        </Button>
+                        <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={rows.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </div>
+                </Paper>
+            )}
         </Layout>
     )
 }
