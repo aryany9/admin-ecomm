@@ -11,8 +11,8 @@ function AppRouter() {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<GuestPage />} />
-                <Route path='home' element={<Homepage />} />
-                <Route path='user-dashboard' element={<UserDashboard />} />
+                <Route path='dashboard' element={<Homepage />} />
+                <Route path='users' element={<UserDashboard />} />
                 <Route path='login' element={<Login />} />
                 <Route path='signup' element={<SignUp />} />
 

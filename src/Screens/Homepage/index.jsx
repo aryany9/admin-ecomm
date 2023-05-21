@@ -6,7 +6,7 @@ import { Toolbar, Typography, Box } from '@mui/material'
 function Homepage(props) {
   return (
 
-    <Layout>
+    <Layout title='Dashboard'>
       <Box component="main" sx={{ p: 3 }}>
         {/* <Toolbar /> */}
         <Typography>

@@ -7,28 +7,40 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Toolbar, Typography, AppBar } from '@mui/material';
 import AppDrawer from './AppDrawer';
 
-const LayoutContainer = styled.div`
+const LayoutStructure = styled.div`
     display: flex;
     align-items: flex-start;
     align-content: start;
 `
 
 const LayoutChildren = styled.div`
-    
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    /* background-color: black; */
+`
+
+const LayoutComponent = styled.div`
+    padding-left: 2%;
+    padding-right: 2%;
 `
 
 const drawerWidth = 240;
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title }) => {
     return (
-        <LayoutContainer>
+        <LayoutStructure>
             <AppDrawer />
-            {/* <Navbar /> */}
+            <LayoutChildren>
+                <Toolbar>
+                    <Typography fontWeight={'bold'} >
+                        {title ?? 'Page'}
+                    </Typography>
+                </Toolbar>
+                <LayoutComponent >
 
-            {/* <NavigationDrawer /> */}
-            <LayoutChildren >
-                {children}
-                {/* <AppBar
+                    {children}
+                    {/* <AppBar
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
                 >
@@ -74,8 +86,9 @@ const Layout = ({ children }) => {
                         </Typography>
                     </Box>
                 </Box> */}
+                </LayoutComponent>
             </LayoutChildren>
-        </LayoutContainer>
+        </LayoutStructure >
     )
 }
 
