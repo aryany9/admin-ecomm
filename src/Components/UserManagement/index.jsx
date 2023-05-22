@@ -15,6 +15,7 @@ import FromApi from '../../Utilities/FromApi';
 import { getUsers } from '../../Services/UserDashboardService';
 import LoadingIcons from 'react-loading-icons'
 import { useTheme } from '@mui/material/styles';
+import FormDialog from '../widgets/FormDialog';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -112,6 +113,16 @@ function UserDashboard() {
         });
     }, [])
 
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
     return (
         <Layout title='Manage Users'>
             {users.length === 0 ? (
@@ -158,7 +169,7 @@ function UserDashboard() {
                         </Table>
                     </TableContainer>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 10 }}>
-                        <Button variant="contained" color="secondary" disableElevation size='small' style={{fontWeight: 'bold'}}>
+                        <Button variant="contained" color="secondary" disableElevation size='small' style={{ fontWeight: 'bold' }} onClick={handleOpenDialog}>
                             Add User
                         </Button>
                         <TablePagination
@@ -171,7 +182,9 @@ function UserDashboard() {
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         />
                     </div>
+                    <FormDialog open={openDialog} handleClose={handleCloseDialog} />
                 </Paper>
+
             )}
         </Layout>
     )
